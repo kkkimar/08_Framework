@@ -1,0 +1,12 @@
+.container{
+  width: 50vw; 
+  /* 보여지는 화면 너비의 50% */
+  height: 400px;
+  margin: auto;
+  background-color: skyblue;
+}
+
+.container img{
+  width: 19%;
+  height: auto;
+}

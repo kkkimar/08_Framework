@@ -69,4 +69,43 @@ public class TodoServiceImpl implements TodoService{
 		return mapper.addTodo(todo);
 	}//addTodo
 	
+	
+	// 할 일 상세 조회
+	@Override
+	public Todo todoDetail(int todoNo) {
+		return mapper.todoDetail(todoNo);
+	}
+	
+	// 할 일 삭제
+	@Override
+	public int todoDelete(int todoNo) {
+		return mapper.todoDelete(todoNo);
+	}
+	
+	@Override
+	public int todoUpdate(Todo todo) {
+		//마이바티스 객체를 이용할 때
+		// SQL에 전달할 수 있는 파라미터는 오직 1개!
+		// -> 여러 데이터를 전달하고 싶으면 Map,DTO,List로 묶어서 전달하는 게 기본 ! 
+		return mapper.todoUpdate(todo);
+	}
+	
+	
+	@Override
+	public int changeComplete(Todo todo) {
+		return mapper.changeComplete(todo);
+	}
+	
+	
+	//전체 할 일 개수 조회
+	@Override
+	public int getTotalCount() {
+		return mapper.getTotalCount();
+	}
+	
+	@Override
+	public int getCompleteCount() {
+		return mapper.getCompleteCount();
+	}
+	
 }

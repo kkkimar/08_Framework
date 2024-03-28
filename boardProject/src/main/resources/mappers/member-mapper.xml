@@ -14,7 +14,7 @@
   <!-- 로그인 -->
   <select id="login" resultType="Member">
   
-  	SELECT MEMBER_NO, MEMBER_EMAIL, MEMBER_NICNAME, MEMBER_PW, MEMBER_TEL, MEMBER_ADDRESS,PROFILE_IMG, AUTHORITY,
+  	SELECT MEMBER_NO, MEMBER_EMAIL, MEMBER_NICKNAME, MEMBER_PW, MEMBER_TEL, MEMBER_ADDRESS,PROFILE_IMG, AUTHORITY,
 			 TO_CHAR(ENROLL_DATE,'YYYY"년" MM"월" DD"일" HH24"시" MI"분" SS"초"') ENROLL_DATE
 	FROM "MEMBER"
 	WHERE MEMBER_EMAIL = #{memberEmail}
@@ -22,5 +22,24 @@
   
   </select>
   
+  <!-- 회원가입 -->
+  <!-- parameterType="Member" 생략 가능 -->
+  <!-- insert,update,delete 결과가 모두 행의 개수(int)
+  		-> resultType 작성 X
+   -->
+  <insert id="signup">
+  	INSERT INTO "MEMBER"
+		VALUES(SEQ_MEMBER_NO.NEXTVAL,
+		    #{memberEmail},
+			#{memberPw},
+			#{memberNickname},
+			#{memberTel},
+			#{memberAddress},
+			NULL,
+			DEFAULT,
+			DEFAULT,
+			DEFAULT
+		)
+  </insert>
   
 </mapper>

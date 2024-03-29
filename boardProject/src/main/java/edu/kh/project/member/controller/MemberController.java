@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -65,54 +66,61 @@ public class MemberController {
 			@RequestParam(value = "saveId", required = false) String saveId,
 			HttpServletResponse resp
 			) {
-		
-		// 체크박스에 value가 없을 경우
-		// - 체크가 된 경우   :"on" (null 아님)
-		// - 체크가 안된 경우 : null
-		//log.debug("saveId : " + saveId);
-		
-		// 로그인 서비스 호출
-		Member loginMember = service.login(inputMember);
-		
-		// 로그인 실패 시
-		if(loginMember == null) {
-			ra.addFlashAttribute("message", "아이디 또는 비밀번호가 일치하지 않습니다");
-		}
-		
-		// 로그인 성공 시
-		if(loginMember != null) {
-			//Session scope에 loginMember 추가
-			model.addAttribute("loginMember",loginMember);
-			// 1 단계 : request scope에 세팅됨
-			// 2 단계 : 클래스 위에 @SessionAttributes() 어노테이션 때문에
-			//          session scope로 이동됨
 			
-			/*************************************************************************/
-			// 아이디 저장(Cookie)
+			// 체크박스에 value가 없을 때
+			// - 체크가   된 경우  : "on"  (null 아님)
+			// - 체크가 안된 경우  : null
+//			log.debug("saveId : " + saveId);
 			
-			// 쿠키 객체 생성(K:V)
-			Cookie cookie = new Cookie("saveId", loginMember.getMemberEmail());
 			
-			// 클라이언트가 어떤 요청을 할 때 쿠키가 첨부될지 지정
-			// ex) "/" : IP 또는 도메인 또는 localhost 
-			//     뒤에 "/" --> 메인페이지 + 그 하위 주소들
-			cookie.setPath("/");
+			// 로그인 서비스 호출
+			Member loginMember = service.login(inputMember);
 			
-			//만료 기간 지정
-			if(saveId != null) { //아이디 저장 체크 시
-				cookie.setMaxAge(30*24*60*60); // 30일 초 단위로 지정
-			}else { //미체크 시
-				cookie.setMaxAge(0); //0초 (클라이언트 쿠키 삭제)
+			
+			// 로그인 실패 시 
+			if(loginMember == null) {
+				ra.addFlashAttribute("message", "아이디 또는 비밀번호가 일치하지 않습니다");
 			}
 			
-			// 응답 객체에 쿠키 추가 -> 클라이언트로 전달
-			resp.addCookie(cookie);
+			// 로그인 성공 시
+			if(loginMember != null) {
+				// Session scope에 loginMember 추가
+				
+				model.addAttribute("loginMember", loginMember);
+				// 1 단계 : request scope에 세팅됨
+				
+				// 2 단계 : 클래스 위에 @SessionAttributes() 어노테이션 때문에
+				//			session scope로 이동됨
+				
+				
+				/* ******************************************** */
+				// 아이디 저장(Cookie)
+				
+				// 쿠키 객체 생성(K:V)
+				Cookie cookie = new Cookie("saveId", loginMember.getMemberEmail());
+				
+				// 클라이언트가 어떤 요청을 할 때 쿠키가 첨부될지 지정
+				
+				// ex) "/"  : IP 또는 도메일 또는 localhost 
+				//			  뒤에 "/"  --> 메인 페이지 + 그 하위 주소 들
+				cookie.setPath("/");
+				
+				// 만료 기간 지정
+				if(saveId != null) { // 아이디 저장 체크 시
+					cookie.setMaxAge(30 * 24 * 60 * 60); // 30일 (초 단위로 지정)
+				
+				} else { // 미체크 시
+					cookie.setMaxAge(0); // 0초 (클라이언트 쿠키 삭제)
+				}
+				
+				// 응답 객체에 쿠키 추가 -> 클라이언트로 전달
+				resp.addCookie(cookie);
+				
+				/* ******************************************** */
+			}
 			
-			/*************************************************************************/
 			
-		}
-		
-		return "redirect:/"; // 메인페이지 재요청
+			return "redirect:/"; // 메인페이지 재요청
 	}//login
 	
 	
@@ -185,6 +193,32 @@ public class MemberController {
 		return "redirect:"+path;
 	}//signup
 	
+	/** 이메일 중복 검사
+	 * @param memberEmail
+	 * @return 중복 1, 아니면 0
+	 */
+	@ResponseBody // 응답 본문(요청한 fetch())으로 돌려보냄
+	@GetMapping("checkEmail")
+	public int checkEmail(
+			@RequestParam("memberEmail") String memberEmail
+			) {
+			
+		return service.checkEmail(memberEmail);
+	}
+	
+
+	
+	/** 닉네임 중복 검사
+	 * @return count
+	 */
+	@ResponseBody
+	@GetMapping("checkNickname")
+	public int checkNickname(
+			@RequestParam("memberNickname") String memberNickname
+			) {
+		
+		return service.checkNick(memberNickname);
+	}
 	
 	
 }

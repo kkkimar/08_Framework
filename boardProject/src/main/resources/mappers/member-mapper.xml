@@ -42,4 +42,23 @@
 		)
   </insert>
   
+  <!-- select는 조회 타입이 정해져 있지 않아 타입 지정하기 -->
+  <select id="checkEmail" resultType="_int">
+  
+  	SELECT COUNT(*) 
+	FROM "MEMBER"
+	WHERE MEMBER_DEL_FL='N'
+	AND MEMBER_EMAIL = #{memberEmail}
+  
+  </select>
+  
+  <select id="checkNick" resultType="_int">
+  
+  	SELECT COUNT(*)
+	FROM "MEMBER"
+	WHERE MEMBER_DEL_FL ='N'
+	AND MEMBER_NICKNAME = #{memberNickname}
+  
+  </select>
+  
 </mapper>

@@ -50,40 +50,31 @@ public class MyPageServiceImpl implements MyPageService {
 	}
 	
 	
-	// 비밀번호 변경
+	//비밀번호 변경
 	@Override
-	public int changePw(String currentPw, String newPw, Member loginMember) {
-		
-		// bcrypt 암호화된 비밀번호를 DB에서 조회(회원 번호 필요)
-		int memberNo = loginMember.getMemberNo();
-		String memberPw = mapper.checkPw(memberNo);
-		
-		// BcryptPasswordEncoder.matches(평문, 암호화된 비밀번호) 
-		
-		// 일치할 경우
-		int result = 0;
-		
-		if(bycript.matches(currentPw, memberPw)) {
-			/*
-			 * -> 새 비밀번호를 암호화 진행
- 			   -> 새 비밀번호로 변경(UPDATE)하는 Mapper 호출
-    			  회원 번호, 새 비밀번호 -> 하나로 묶음 (Member 또는 Map) 
-    		   -> 결과 1 또는 0 반환
-			 * */
-			
-			//새로운 비밀번호 암호화
-			String encPw = bycript.encode(newPw);
-			//loginMember.setMemberPw(encPw);
-			
-			Map<String, Object> map = new HashMap<>();
-			map.put("encPw", encPw);
-			map.put("memberNo", memberNo);
+	public int changePw(Map<String, Object> paramMap, int memberNo) {
 
-			return result = mapper.changePw(map);
+		// 현재 로그인한 회원의 암호화된 비밀번호를 DB에서 조회
+		String originPw = mapper.selectPw(memberNo);
+		
+		// 입력받은 현재 비밀번호와 DB에서 조회한 비밀번호 비교
+		
+		// 다를 경우
+		if(!bycript.matches((String)paramMap.get("currentPw"), originPw)) {
+			return 0;
 		}
 		
+		// 같은 경우
 		
-		return result;
+		// 새 비밀번호를 암호화
+		String encPw = bycript.encode((String)paramMap.get("newPw"));
+		
+		// 새 비밀번호 변경 mapper 호출
+		// Mapper에 전달 가능한 파라미터는 1개뿐! -> 묶어서 전달
+		
+		paramMap.put("encPw", encPw);
+		paramMap.put("memberNo", memberNo);
+		return mapper.changePw(paramMap);
 	}
 	
 

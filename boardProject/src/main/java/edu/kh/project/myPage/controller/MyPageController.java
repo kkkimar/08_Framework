@@ -1,5 +1,7 @@
 package edu.kh.project.myPage.controller;
 
+import java.util.Map;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -129,25 +131,33 @@ public class MyPageController {
 		return "redirect:info";
 	}
 	
+	/**
+	 * @param paramMap : 모든 파라미터를 맵으로 저장
+	 * @param loginMember : 세션 로그인한 회원 정보
+	 * @return
+	 */
 	@PostMapping("changePw")
 	public String changePw(
-			@RequestParam("currentPw") String currentPw,
-			@RequestParam("newPw") String newPw,
-			@RequestParam("newPwConfirm") String newPwConfirm,
+			@RequestParam Map<String, Object> paramMap,
 			@SessionAttribute("loginMember") Member loginMember,
 			RedirectAttributes ra
 			) {
 		
-		int result = service.changePw(currentPw,newPw,loginMember);
-		String message=null;
-		String path =null;
+		//로그인한 회원 번호
+		int memberNo = loginMember.getMemberNo();
 		
-		if(result > 0) {
-			message = "비밀번호 변경 성공";
+		//현재+새+회원 번호 서비스로 전달
+		int result = service.changePw(paramMap,memberNo);
+		
+		String path =null;
+		String message =null;
+		
+		if(result>0) {
 			path = "/myPage/info";
+			message = "비밀번호가 변경 되었습니다";
 		}else {
-			message = "비밀번호 변경 실패...";
 			path = "/myPage/changePw";
+			message = "현재 비밀번호가 일치하지 않습니다";
 		}
 		
 		ra.addFlashAttribute("message",message);

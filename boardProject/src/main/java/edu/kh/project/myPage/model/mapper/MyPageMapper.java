@@ -21,11 +21,19 @@ public interface MyPageMapper {
 	 */
 	String checkPw(int memberNo);
 
-	/** 비밀번호 변경
-	 * @param map
-	 * @return
+	/** 회원의 비밀번호 조회
+	 * @param memberNo
+	 * @return 암호화된 비밀번호
 	 */
-	int changePw(Map<String, Object> map);
+	String selectPw(int memberNo);
+ 
+	/** 비밀번호 변경
+	 * @param paramMap
+	 * @return result
+	 */
+	int changePw(Map<String, Object> paramMap);
+
+	
 
 
 

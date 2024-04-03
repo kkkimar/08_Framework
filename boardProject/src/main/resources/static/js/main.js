@@ -95,6 +95,14 @@ const selectMemberList = document.querySelector("#selectMemberList")
 // tbody
 const memberList = document.querySelector("#memberList")
 
+// td
+const createTd = (text)=>{
+  const td = document.createElement("td");
+  td.innerText = text;
+  return td;
+};
+
+
 // 조회 버튼 클릭시 
 selectMemberList.addEventListener("click",()=>{
 
@@ -102,37 +110,35 @@ selectMemberList.addEventListener("click",()=>{
   // (포함될 회원 정보 : 회원번호, 이메일, 닉네임, 탈퇴여부)
   // 첫번째 then(response=> response.json())
   //  JSON Array-> JS 객체 배열로 반환 [{},{},{},{}]
-  fetch("/member/memberList")
-  .then(resp=>resp.text())
-  .then(result => {
-    const memberAllList = JSON.parse(result);
-    
-    memberList.innerText ="";
 
-   for(let member of memberAllList ){
-    
-
-
-
-   }
-
-
-    
-
-
-
-
-
-  })
-
-
-  // 2) 두번째 then
+    // 2) 두번째 then
   // tbody에 이미 작성되어 있던 내용(이전에 조회한 목록) 삭제
   
   // 3) 두번째 then
   // 조회된 JS 객체 배열을 이용해
   // tbody에 들어갈 요소를 만들고 값 세팅 후 추가
 
+  fetch("/member/memberList")
+  .then(resp=>resp.text())
+  .then(result => {
+    const memberAllList = JSON.parse(result);
+    
+    memberList.innerHTML ="";
+
+    for(let member of memberAllList ){
+    
+      const tr = document.createElement("tr");
+      const arr = ['memberNo','memberEmail','memberNickname','memberDelFl'];
+
+      for(let key of arr){
+
+        //const td = document.createElement('td');
+        //td.innerText = member[key];
+        tr.append(createTd(member[key]));
+      }
+      memberList.append(tr);
+   }
+  })
 });
 
 

@@ -250,6 +250,8 @@ public class MemberController {
 	@GetMapping("memberList")
 	public List<Member> memberList() {
 		
+		// (Java)List -> HttpMessageConverter가 JSON Array(문자열)로 변경
+		//  -> response.json() -> [{},{},{}] JS 객체 배열
 		List<Member> memberList = service.memberList();
 		
 		return memberList;

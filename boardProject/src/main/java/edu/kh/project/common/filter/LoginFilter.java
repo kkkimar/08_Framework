@@ -30,7 +30,7 @@ public class LoginFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		
-		//ServletRequest : HttpServletRequest의 부모타입
+				//ServletRequest : HttpServletRequest의 부모타입
 				//ServletResponse : HttpServletResponse의 부모타입
 				
 				//HTTP 통신이 가능한 형태로 다운캐스팅

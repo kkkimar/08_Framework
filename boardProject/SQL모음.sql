@@ -116,8 +116,8 @@ FROM "MEMBER";
 
 
 UPDATE "MEMBER" SET 
-MEMBER_ADDRESS  = 'A^^^B^^^C'
-WHERE MEMBER_EMAIL ='kimarv@naver.com';
+MEMBER_DEL_FL = 'N'
+WHERE MEMBER_EMAIL ='test01@kh.or.kr';
 
 COMMIT;
 

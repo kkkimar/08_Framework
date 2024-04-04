@@ -141,4 +141,65 @@ selectMemberList.addEventListener("click",()=>{
   })
 });
 
+//-----------------------------------------------------------
+/* 특정회원 비밀번호 초기화 */
+const resetMemberNo = document.querySelector("#resetMemberNo");
+const resetPw = document.querySelector("#resetPw");
+
+resetPw.addEventListener("click",()=>{
+
+  // 입력 받은 회원 번호 얻어오기
+  const inputNo = resetMemberNo.value;
+
+  if(inputNo.trim().length == 0){
+    alert("회원번호를 입력해 주세요");
+    return;
+  }
+
+  fetch("/resetPw",{
+    method : "PUT", // PUT: 수정 요청 방식
+    headers :{"Content-Type" :"application/json "} ,
+    body : inputNo
+  })
+  .then(resp=>resp.text())
+  .then(result=>{
+    //result == 컨트롤러로부터 반환 받아 text로 파싱한 값
+
+    if(result > 0) alert("초기화 성공");
+    else alert("해당 회원이 존재하지 않습니다");
+  });
+
+});
+
+// 특정회원 탈퇴 복구
+
+const resetAccounNo = document.querySelector("#resetAccounNo");
+const resetAccountBtn = document.querySelector("#resetAccountBtn");
+
+resetAccountBtn.addEventListener("click",()=>{
+
+  const inputNo = resetAccounNo.value;
+
+  if(inputNo.trim().length == 0){
+    alert("회원번호를 입력해 주세요");
+  }
+
+  fetch("/resetId",{
+    method : "PUT",
+    headers : {"Content-Type": "application/json"},
+    body : inputNo
+  })
+  .then(resp=>resp.text())
+  .then(result=>{
+
+    if(result>0){
+      alert("복구 성공");
+      inputNo.innerText = "";
+    } else alert("회원번호를 확인해주세요");
+
+  })
+
+
+});
+
 

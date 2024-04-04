@@ -1,6 +1,9 @@
 package edu.kh.project.myPage.model.service;
 
+import java.io.IOException;
 import java.util.Map;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import edu.kh.project.member.model.dto.Member;
 
@@ -19,6 +22,23 @@ public interface MyPageService {
 	 * @return result
 	 */
 	int changePw(Map<String, Object> paramMap, int memberNo);
+
+	
+	
+	/** 회원 탈퇴 
+	 * @param memberPw
+	 * @param memberNo
+	 * @return result
+	 */
+	int secession(String memberPw, int memberNo);
+
+	/** 파일업로드 테스트1
+	 * @param uploadFile
+	 * @return path
+	 */
+	String fileUpload1(MultipartFile uploadFile) throws IllegalStateException, IOException;
+	
+	
 
 
 

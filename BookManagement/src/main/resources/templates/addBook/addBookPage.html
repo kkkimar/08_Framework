@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>책 등록</title>
+</head>
+<body>
+  <h2>책 등록</h2>
+  <form action="/addBook/insertBook" method="POST" >
+
+    <div>
+      제목 :
+      <input type="text" name="bookTitle">
+    </div>
+
+    <div>
+      글쓴이 :
+      <input type="text" name="bookWriter">
+    </div>
+
+    <div>
+      가격 :
+      <input type="text" name="bookPrice">
+    </div>
+
+    <button>등록하기</button>
+
+  </form>
+
+</body>
+</html>

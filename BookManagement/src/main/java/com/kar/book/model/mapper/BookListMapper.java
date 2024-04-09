@@ -21,4 +21,18 @@ public interface BookListMapper {
 	 */
 	int insertBook(BookList bookList);
 
+
+	
+	/** 도서 목록 검색
+	 * @param bookTitle
+	 * @return
+	 */
+	List<BookList> bookTitleSearch(String bookTitle);
+
+
+	
+	
+	
+	
+
 }

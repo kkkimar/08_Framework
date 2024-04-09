@@ -19,4 +19,12 @@ public interface BookListService {
 	 */
 	int insertBook(String bookTitle, String bookWriter, int bookPrice);
 
+
+
+	/** 책 목록 검색
+	 * @param bookTitle
+	 * @return bookList
+	 */
+	List<BookList> bookTitleSearch(String bookTitle);
+
 }

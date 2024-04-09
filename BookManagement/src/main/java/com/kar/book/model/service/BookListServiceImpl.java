@@ -40,5 +40,12 @@ public class BookListServiceImpl implements BookListService {
 		return mapper.insertBook(bookList);
 	}
 	
+	// 도서 목록 검색
+	@Override
+	public List<BookList> bookTitleSearch(String bookTitle) {
+		return mapper.bookTitleSearch(bookTitle);
+	}
+	
+	
 	
 }

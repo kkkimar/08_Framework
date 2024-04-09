@@ -10,14 +10,14 @@
 
   <div>
     제목:
-    <input type="text" name="bookTitle" placeholder="내용을 입력해 주세요"> 
-    <button>검색</button>
+    <input type="text"  name="bookTitle" id="inputTitle" placeholder="내용을 입력해 주세요"> 
+    <button id="searchBookBtn">검색</button>
   </div>
 
   <!-- 제목이 포함된 책 모두 조회 -->
-  <table border="1" style="border-collapse: collapse;">
+  <table border="1" style="border-collapse: collapse;" id="bookTitleSearch">
 
-    <thead>
+    <thead id="thead">
       <th>책 번호</th>
       <th>제목</th>
       <th>글쓴이</th>
@@ -27,10 +27,12 @@
       <th>삭제버튼</th>
     </thead>
 
-    <tbody id="serchBookTable">
+    <tbody id="serchBookTbody">
       
     </tbody>
 
   </table>
+
+  <script src="/js/bookManagement.js"></script>
 </body>
 </html>

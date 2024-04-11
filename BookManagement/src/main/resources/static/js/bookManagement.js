@@ -109,7 +109,7 @@ const createTd = (text)=>{
   return td;
 }
 
-//td 함수
+//수정 삭제 td 함수
 const createBtn = (text, btnClass)=>{
   const td = document.createElement("td");
   let val = "";

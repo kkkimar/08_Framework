@@ -540,6 +540,167 @@ SELECT * FROM CUSTOMER;
 
 INSERT INTO TB_USER VALUES(SEQ_UNO.NEXTVAL, ?, ?, ?);
 
+-------------------------------------------------------------------------------------------
+
+/*게시판 종류(	BOARD_TYPE) 추가*/
+
+CREATE SEQUENCE SEQ_BOARD_CODE NOCACHE;
+
+INSERT INTO "BOARD_TYPE" VALUES(SEQ_BOARD_CODE.NEXTVAL,'공지 게시판');
+INSERT INTO "BOARD_TYPE" VALUES(SEQ_BOARD_CODE.NEXTVAL,'정보 게시판');
+INSERT INTO "BOARD_TYPE" VALUES(SEQ_BOARD_CODE.NEXTVAL,'자유 게시판');
+
+COMMIT;
+
+SELECT BOARD_CODE "boardCode" , BOARD_NAME  "boardName"
+FROM BOARD_TYPE
+ORDER BY BOARD_CODE;
+
+------------------------------------------------------------------------------------------------------
+/*게시글 번호 시퀀스 생성*/
+CREATE SEQUENCE SEQ_BOARD_NO NOCACHE;
+
+/*게시판(BOARD) 테이블 샘플 데이터 삽입(PL/SQL)*/
+
+--DBMS_RANDOM.VALUE(0,3) : 0.0 이상, 3.0 미만의 난수
+--CEIL(DBMS_RANDOM.VALUE(0,3)) : 1,2,3 중 하나
+
+SELECT * FROM "MEMBER";
+
+-- ALT + X 로 실행해야함
+BEGIN
+	FOR I IN 1..2000 LOOP
+	
+		INSERT INTO "BOARD"
+		VALUES(SEQ_BOARD_NO.NEXTVAL,
+					SEQ_BOARD_NO.CURRVAL || '번째 게시글',
+					SEQ_BOARD_NO.CURRVAL || '번째 게시글 내용입니다',
+					DEFAULT, DEFAULT,DEFAULT,DEFAULT,
+					CEIL(DBMS_RANDOM.VALUE(0,3)),
+					12					
+		);
+		
+	END LOOP;
+END;
+
+-- 게시판 종류별 샘플 데이터 삽입 확인
+SELECT BOARD_CODE, COUNT(*) 
+FROM "BOARD"
+GROUP BY BOARD_CODE 
+ORDER BY BOARD_CODE;
+
+-------------------------------------------------------------------------------------
+-- 부모 댓글 번호 NULL 허용
+ALTER TABLE "COMMENT"
+MODIFY PARENT_COMMENT_NO NUMBER NULL;
+
+
+/*댓글 번호 시퀀스 생성*/
+CREATE SEQUENCE SEQ_COMMENT_NO NOCACHE;
+
+/*댓글 (COMMENT) 테이블에 샘플 데이터 추가*/
+
+BEGIN
+	FOR I IN 1..2000 LOOP
+		INSERT INTO "COMMENT" 
+		VALUES(
+			SEQ_COMMENT_NO.NEXTVAL,
+			SEQ_COMMENT_NO.CURRVAL || '번째 댓글 입니다',
+			DEFAULT, DEFAULT,
+			CEIL(DBMS_RANDOM.VALUE(0,2000)),
+			12,
+			NULL
+		);
+	END LOOP;
+	
+END;
+;
+
+COMMIT;
+
+-- 게시글 번호 최소값, 최대값 
+SELECT MIN(BOARD_NO), MAX(BOARD_NO) FROM "BOARD";
+
+-- 댓글 삽입 확인하기
+SELECT COUNT(*) 
+FROM "COMMENT"
+GROUP BY BOARD_NO 
+ORDER BY BOARD_NO;
+
+--------------------------------------------------------------------
+/* 특정 게시판(BOARD_CODE)에 삭제되지 않은 게시글 목록 조회
+ * 단, 최신글이 제일 위에 존재
+ * 몇 초/분/시간 전 또는 YYYY-MM-DD 형식으로 작성일 조회
+ * 
+ * + 댓글 개수
+ * + 좋아요 개수
+ * */
+
+-- 번호 / 제목[댓글 개수] / 작성자닉네임 / 작성일/ 조회수 / 좋아요 개수 
+-- 상관 서브 쿼리
+-- 1) 메인 쿼리 1행 조회
+-- 2) 1행 조회 결과를 이용해서 서브쿼리 수행
+--		(메인 쿼리 모두 조회할 때까지 반복)
+SELECT BOARD_NO, BOARD_TITLE , MEMBER_NICKNAME, READ_COUNT ,
+	(SELECT COUNT(*) 
+	 FROM "COMMENT" C
+	 WHERE C.BOARD_NO = B.BOARD_NO) COMMENT_COUNT,
+	 
+	(SELECT COUNT(*)
+	 FROM "BOARD_LIKE" L
+	 WHERE L.BOARD_NO = B.BOARD_NO) LIKE_COUNT,
+	 
+	 CASE 
+	 	WHEN SYSDATE - BOARD_WRITE_DATE < 1 / 24 / 60 
+	 	THEN FLOOR((SYSDATE - BOARD_WRITE_DATE) * 24 * 60 * 60) ||'초 전'
+	 	
+	 	WHEN SYSDATE - BOARD_WRITE_DATE < 1 / 24 
+	 	THEN FLOOR((SYSDATE - BOARD_WRITE_DATE) * 24 * 60 )||'분 전'
+	 	
+	 	WHEN SYSDATE - BOARD_WRITE_DATE < 1 
+	 	THEN FLOOR((SYSDATE - BOARD_WRITE_DATE) * 24 ) ||'시간 전'
+	 	
+	 	ELSE TO_CHAR(BOARD_WRITE_DATE,'YYYY-MM-DD')
+	 END BOARD_WRITE_DATE
+	 
+	 
+FROM "BOARD" B
+JOIN "MEMBER" USING(MEMBER_NO)
+WHERE BOARD_DEL_FL ='N'
+AND BOARD_CODE = 1
+ORDER BY BOARD_NO DESC ;
+
+
+-- 특정 게시글의 댓글 개수 조회
+SELECT COUNT(*) FROM "COMMENT"
+WHERE BOARD_NO = 199;
+
+-- 현재시간 - 하루 전 --> 정수 부분 == 일 단위
+SELECT (SYSDATE - TO_DATE('2024-04-10 12:14:30','YYYY-MM-DD HH24:MI:SS') ) * 60 * 60 * 24
+FROM DUAL;
+
+
+-- 지정된 게시판(boardCode)에서 삭제되지 않은 게시글 수를 조회
+SELECT COUNT(*)
+FROM "BOARD"
+WHERE BOARD_DEL_FL  = 'N'
+AND BOARD_CODE = 3;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

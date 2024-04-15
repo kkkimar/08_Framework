@@ -761,6 +761,18 @@ START WITH PARENT_COMMENT_NO IS NULL
 CONNECT BY PRIOR COMMENT_NO = PARENT_COMMENT_NO
 ORDER SIBLINGS BY COMMENT_NO;
 
+-----------------------------------------------------------------------------------------------------
+/*좋아요 테이블(BOARD_LIKE) 샘플 데이터 추가*/
+INSERT INTO "BOARD_LIKE"
+VALUES(12,2000); --12번 회원이 2000번 글에 좋아요를 클릭함
+COMMIT;
+
+-- 좋아요 여부 확인(1: 좋아요 누름 / 2: 안누름)
+SELECT COUNT(*)  FROM "BOARD_LIKE"
+WHERE MEMBER_NO = 12
+AND BOARD_NO = 2000;
+
+ 
 
 
 

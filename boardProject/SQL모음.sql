@@ -577,11 +577,14 @@ BEGIN
 					SEQ_BOARD_NO.CURRVAL || '번째 게시글 내용입니다',
 					DEFAULT, DEFAULT,DEFAULT,DEFAULT,
 					CEIL(DBMS_RANDOM.VALUE(0,3)),
-					12					
+					1					
 		);
 		
 	END LOOP;
 END;
+
+SELECT COUNT(*) FROM "BOARD" 
+WHERE MEMBER_NO =1;
 
 -- 게시판 종류별 샘플 데이터 삽입 확인
 SELECT BOARD_CODE, COUNT(*) 
@@ -607,8 +610,8 @@ BEGIN
 			SEQ_COMMENT_NO.NEXTVAL,
 			SEQ_COMMENT_NO.CURRVAL || '번째 댓글 입니다',
 			DEFAULT, DEFAULT,
-			CEIL(DBMS_RANDOM.VALUE(0,2000)),
-			12,
+			CEIL(DBMS_RANDOM.VALUE(4,4004)),
+			1,
 			NULL
 		);
 	END LOOP;
@@ -617,6 +620,8 @@ END;
 ;
 
 COMMIT;
+
+SELECT COUNT(*) FROM "COMMENT";
 
 -- 게시글 번호 최소값, 최대값 
 SELECT MIN(BOARD_NO), MAX(BOARD_NO) FROM "BOARD";
@@ -768,7 +773,7 @@ ORDER SIBLINGS BY COMMENT_NO;
 -----------------------------------------------------------------------------------------------------
 /*좋아요 테이블(BOARD_LIKE) 샘플 데이터 추가*/
 INSERT INTO "BOARD_LIKE"
-VALUES(12,2000); --12번 회원이 2000번 글에 좋아요를 클릭함
+VALUES(1,2000); --1번 회원이 2000번 글에 좋아요를 클릭함
 COMMIT;
 
 -- 좋아요 여부 확인(1: 좋아요 누름 / 2: 안누름)

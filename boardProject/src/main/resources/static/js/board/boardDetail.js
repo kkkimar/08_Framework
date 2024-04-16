@@ -68,14 +68,27 @@ boardLike.addEventListener("click",e=>{
 //--------삭제버튼 클릭시-----------------------------------------------
 const deleteBtn = document.querySelector("#deleteBtn");
 
-deleteBtn.addEventListener("click",()=>{
+if(deleteBtn != null){
 
-  if(!confirm("삭제하시겠습니까?")){
-    alert("취소되었습니다");
-    return;
-  }else{
+  deleteBtn.addEventListener("click",()=>{
+
+    if(!confirm("삭제하시겠습니까?")){
+      alert("취소되었습니다");
+      return;
+    }
+
     // 확인버튼 클릭시
-    location.href = `/editBoard/${boardCode}/${boardNo}/delete?cp=${cp}`;
-  }
+    //location.href = `/editBoard/${boardCode}/${boardNo}/delete?cp=${cp}`;
+    //location.replace -> 기능: 기존페이지를 새로운 페이지로 변경
+    //location.pathname -> hostname 뒤의 '/'문자 뒤의 경로를 가져옴
+    //location.search -> '?' 뒤의 쿼리스트링을 가져옴 
+    const url = location.pathname.replace("board","editBoard") + "/delete"; // /editBoard/1/2000/delete
+    const queryString = location.search; // ? cp=1
+    location.href = url + queryString;
+  
+  });
 
-});
+};
+
+
+

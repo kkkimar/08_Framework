@@ -1,7 +1,9 @@
 package edu.kh.project.board.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -119,22 +121,33 @@ public class EditBoardController {
 	private String deleteBoard(
 			@PathVariable("boardCode") int boardCode,
 			@PathVariable("boardNo") int boardNo,
-			@RequestParam (value="cp", required=false, defaultValue="1") int cp
+			@RequestParam (value="cp", required=false, defaultValue="1") int cp,
+			@SessionAttribute("loginMember") Member loginMember,
+			RedirectAttributes ra
 			) {
 		
+		Map<String, Integer> map = new HashMap<>();
 		
-		int result = service.deleteBoard(boardNo,boardCode);
+		map.put("boardCode", boardCode);
+		map.put("boardNo", boardNo);
+		map.put("memberNo", loginMember.getMemberNo());
+		
+		int result = service.deleteBoard(map);
 		
 		String path = null;
+		String message = null;
 		
 		if(result>0) {
 			//삭제 성공
-			path = "redirect:/board"+ boardCode;
+			path = String.format("/board/%d", boardCode);
+			message = "삭제 되었습니다";
 		} else {
-			path = "redirect:/board/" + boardCode +"/"+boardNo;
+			path = String.format("/board/%d/%d?cp=%d", boardCode, boardNo, cp);
+			message = "삭제 실패";
 		}
 		
-		return path;
+		ra.addFlashAttribute("message",message);
+		return "redirect:" + path;
 	}
 	
 	

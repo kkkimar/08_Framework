@@ -8,7 +8,6 @@
     <title th:text="|${boardName}-${board.boardNo}번 글|">게시판 이름</title>
     <th:block th:replace="~{common/common}"></th:block>
 
-
     <link rel="stylesheet" href="/css/board/boardDetail-style.css">
     <link rel="stylesheet" href="/css/board/comment-style.css">
 
@@ -120,7 +119,7 @@
 
 
         <!-- 댓글 영역-->
-        <!-- <th:block th:replace="~{board/comment}"></th:block> -->
+        <th:block th:replace="~{board/comment}"></th:block>
 
     </main>
 
@@ -142,7 +141,7 @@
         /* 현재 게시글 좋아요 여부(boardLike)를 전역 변수로 저장 */
         let likeCheck =/*[[${board.likeCheck}]]*/"좋아요 여부";
 
-        const cp = /*[[${param.cp}]]*/ "cp";
+        //const cp = /*[[${param.cp}]]*/ "cp";
 
 
     </script>

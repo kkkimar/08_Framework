@@ -62,5 +62,20 @@ boardLike.addEventListener("click",e=>{
   //7. 게시글 좋아요 수 수정
   e.target.nextElementSibling.innerText = count;
 });
+});
+
+
+//--------삭제버튼 클릭시-----------------------------------------------
+const deleteBtn = document.querySelector("#deleteBtn");
+
+deleteBtn.addEventListener("click",()=>{
+
+  if(!confirm("삭제하시겠습니까?")){
+    alert("취소되었습니다");
+    return;
+  }else{
+    // 확인버튼 클릭시
+    location.href = `/editBoard/${boardCode}/${boardNo}/delete?cp=${cp}`;
+  }
 
 });

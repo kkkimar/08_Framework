@@ -1,5 +1,7 @@
 package edu.kh.project.board.model.dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,5 +25,7 @@ public class BoardImg {
 	private int boardNo;
 	
 	//게시글 이미지 삽입/수정 때 사용
+	private MultipartFile uploadFile;
+
 
 }

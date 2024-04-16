@@ -779,18 +779,50 @@ AND BOARD_NO = 2000;
 SELECT * FROM "BOARD_LIKE";
 
 /* 여러행을 한번에 삽입하는 방법 ! + SUBQUERY */
+-- 시퀀스로 번호 생성하는 부분을 별도 함수로 분리 후 호출
+
 INSERT INTO "BOARD_IMG"
-(SELECT SEQ_IMG_NO.NEXTVAL,'경로1','원본1','변경1',1,1999 FROM DUAL
+(SELECT NEXT_IMG_NO(),'경로1','원본1','변경1',1,1999 FROM DUAL
  UNION
- SELECT SEQ_IMG_NO.NEXTVAL,'경로2','원본2','변경2',2,1999 FROM DUAL
+ SELECT NEXT_IMG_NO(),'경로2','원본2','변경2',2,1999 FROM DUAL
  UNION
- SELECT SEQ_IMG_NO.NEXTVAL,'경로3','원본3','변경3',3,1999 FROM DUAL
+ SELECT NEXT_IMG_NO(),'경로3','원본3','변경3',3,1999 FROM DUAL
 );
+
+SELECT * FROM "BOARD_IMG";
 
 ROLLBACK;
 
- 
+-- SEQ_IMG_NO 시퀀스의 다음 값을 반환하는 함수 생성
+CREATE OR REPLACE FUNCTION NEXT_IMG_NO
+-- 반환형
+RETURN NUMBER 
+-- 사용할 변수
+IS IMG_NO NUMBER;
+BEGIN 
+	SELECT SEQ_IMG_NO.NEXTVAL 
+	INTO IMG_NO
+	FROM DUAL;
 
+	RETURN IMG_NO;
+END;
+;
+
+SELECT NEXT_IMG_NO() FROM DUAL;
+
+SELECT * FROM "BOARD";
+
+-------------------------------------------------------------------------------
+--{boardCode} 게시판의 {boardNo} 글의 BOARD_DEL_FL 값을 'Y'로 변경
+UPDATE "BOARD" SET 
+BOARD_DEL_FL = 'N'
+WHERE BOARD_NO  = 2004
+AND BOARD_CODE = 1;
+
+
+SELECT *
+FROM "BOARD"
+WHERE BOARD_NO = 2014;
 
 
 

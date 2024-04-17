@@ -1,22 +1,30 @@
-/* querySelector() 문제점
-  querySelector() , querySelectorAll()은
-  호출되었을 시점의 요소 형태를 그대로 얻어옴
+/**
+ * 
+<input type = "file">문제점
+1. 선택 후 취소 -> 파일 없어짐
+2. 최대 크기 초과 시 -> 파일이 선택되어 있음
+3. value로 대입할 수 있는 값이 빈칸("")밖에 없음
 
-  getElementsByClassName()같은 경우에는 
-  요소를 얻어와 계속 추적 -> 실시간으로 변경 가능하고 변경된 값도 확인 가능
-*/
+[해결방법]
+-> clone을 이용한 backup
+ * 
+ * 
+ */
 
 
 
 /* 선택된 이미지 미리보기 */
-const previewList = document.getElementsByClassName("preview"); // img 태그 5개
+//const previewList = document.getElementsByClassName("preview"); // img 태그 5개
 const inputImageList = document.getElementsByClassName("inputImage"); // input 태그 5개
 const deleteImageList = document.getElementsByClassName("delete-image"); // x버튼 5개
+
+// x버튼이 눌러져 삭제된 이미지의 순서를 저장
+// *Set : 순서유지 x, 중복저장 x
+const deleteOrder = new Set();
 
 // 이미지 선택 이후 취소를 누를 경우르 대비한 백업 이미지
 // (백원 원리 -> 복제품으로 기존 요소를 대체함)
 const backupInputList = new Array(inputImageList.length);
-
 
 /* *********input 태그 값 변경 시(파일 선택 시) 실행할 함수*********** */
 /**
@@ -92,28 +100,48 @@ const changeImageFn =(inputImage,order)=>{
 
     //같은 순서 backupInputList에 input태그를 복제해서 대입
     backupInputList[order] = inputImage.cloneNode(true);
-  });
-};
 
-for(let i=0; i<inputImageList.length; i++){
-
-  // ***input태그에 이미지가 선택된 경우(값이 변경된 경우)***
-  inputImageList[i].addEventListener("change", e=>{
-    changeImageFn(e.target,i);
-  });
-
-  //********* X버튼 클릭시 *************
-  deleteImageList[i].addEventListener("click",()=>{
-    //img, input, backup의 인덱스가 모두 일치한다는 특징을 이용
-    previewList[i].src =""; //미리보기 이미지 제거
-    inputImageList[i].value="";//input에 선택된 파일 제거
-    backupInputList[i].value ="";//백업본 제거
+    //이미지가 성공적으로 읽어진 경우
+    //deleteOrder에서 해당 순서를 삭제
+    deleteOrder.delete(order);
   });
 };
 
 
-//*****************작성 폼 유효성 검사****************************** */
-document.querySelector("#boardWriteFrm").addEventListener("submit", e=>{
+for(let i=0 ; i<inputImageList.length ; i++){
+
+  // **** input태그에 이미지가 선택된 경우(값이 변경된 경우) ****
+  inputImageList[i].addEventListener("change", e => {
+    changeImageFn(e.target, i);
+  })
+
+
+  // **** x 버튼 클릭 시 ****
+  deleteImageList[i].addEventListener("click", () => {
+
+    // img, input, backup의 인덱스가 모두 일치한다는 특징을 이용
+    // 삭제된 이미지 순서를 deleteOrder에 기록
+    // 미리보기 이미지가 있을 때에만
+
+    if(previewList[i].getAttribute("src") != null 
+        &&  previewList[i].getAttribute("src") != ""  ){
+      // 기존에 이미지가 존재하고 있을 경우에만
+      if( orderList.includes(i) ){
+        deleteOrder.add(i);
+      }
+    }
+    previewList[i].src       = ""; // 미리보기 이미지 제거
+    inputImageList[i].value  = ""; // input에 선택된 파일 제거
+    backupInputList[i]       = undefined; // 백업본 제거
+
+  });
+}
+// ---------------------------------------------------------
+
+// 제출 시 유효성 검사
+const boardUpdateFrm = document.querySelector("#boardUpdateFrm");
+
+boardUpdateFrm.addEventListener("submit",e =>{
 
   const boardTitle = document.querySelector("[name='boardTitle']");
   const boardContent = document.querySelector("[name='boardContent']");
@@ -130,4 +158,10 @@ document.querySelector("#boardWriteFrm").addEventListener("submit", e=>{
     e.preventDefault();
     return;
   }
+
+  //input 태그에 삭제할 이미지 순서(Set)를 배열 형태로 만든 후 대입
+  //-> value(문자열) 저장 시 배열은 toString이 호출 되어 양쪽 대괄호[]가 사라지게 됨
+  document.querySelector("[name='deleteOrder']").value = Array.from(deleteOrder); 
+  document.querySelector("[name='querystring']").value = location.search;
+
 });

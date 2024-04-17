@@ -77,18 +77,51 @@ if(deleteBtn != null){
       return;
     }
 
-    // 확인버튼 클릭시
     //location.href = `/editBoard/${boardCode}/${boardNo}/delete?cp=${cp}`;
-    //location.replace -> 기능: 기존페이지를 새로운 페이지로 변경
+
     //location.pathname -> hostname 뒤의 '/'문자 뒤의 경로를 가져옴
+    //location.replace -> 기능: 기존페이지를 새로운 페이지로 변경
     //location.search -> '?' 뒤의 쿼리스트링을 가져옴 
     const url = location.pathname.replace("board","editBoard") + "/delete"; // /editBoard/1/2000/delete
     const queryString = location.search; // ? cp=1
     location.href = url + queryString;
   
-  });
+    /* ----------- 확인 클릭 시 GET -> POST 방식으로 변경 --------*/
+    // // form태그 생성
+    // const form = document.querySelector("form");
+    // form.action = url;
+    // form.method = "POST";
 
+    // // cp값을 저장할 input 생성
+    // const input = document.querySelector("input");
+    // input.type = "hidden";
+    // input.name = "cp";
+
+    // // 쿼리스트링에서 원하는 파라미터 얻어오기
+    // const params = new URLSearchParams(location.search)
+    // const cp = params.get("cp");
+    // input.value = cp;
+
+    // form.append(input);
+
+    // // 화면에 form태그를 추가한 후 제출하기
+    // document.querySelector("body").append(form);
+    // form.submit();
+  });
 };
 
+/* ----------------------게시글 수정 버튼-------------------------- */
+const updateBtn = document.querySelector("#updateBtn");
 
+if(updateBtn !=null){
+  updateBtn.addEventListener("click",()=>{
+
+    // 현재 : /board/1/2010?cp=1 
+    // 목표: /editBoard/1/2010/update?cp=1  (GET 방식)
+    location.href = location.pathname.replace('board','editBoard')
+                    +"/update"
+                    +location.search
+
+  });
+};
 

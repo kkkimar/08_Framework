@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="edu.kh.project.board.model.mapper.BoardMapper">
 
+
 <!-- 
 	resultType 미작성 할 수 있는 조건
 	- mapper 메서드의 반환형이 별칭으로 등록되어 있을 때 
@@ -92,7 +93,7 @@
 	  	SELECT BOARD_NO, BOARD_TITLE, MEMBER_NICKNAME, READ_COUNT,
 		(SELECT COUNT(*) 
 		 FROM "COMMENT" C
-		 WHERE C.BOARD_NO = B.BOARD_NO) COMMENT_COUNT,
+		 WHERE C.BOARD_NO = B.BOARD_NO AND COMMENT_DEL_FL ='N') COMMENT_COUNT,
 		
 		(SELECT COUNT(*)
 		 FROM "BOARD_LIKE" L
@@ -226,8 +227,6 @@
   	WHERE BOARD_NO = #{boardNo}
   
   </select>
-  
-  
   
 </mapper>
 

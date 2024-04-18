@@ -125,3 +125,16 @@ if(updateBtn !=null){
   });
 };
 
+/* 목록으로 돌아가는 버튼 */
+const goToList = document.querySelector("#goToListBtn");
+
+goToList.addEventListener("click",()=>{
+
+  // 상세조회 : /board/1/2011?cp=1
+  // 목록: /board/1?cp=1
+  let url = location.pathname;
+  //url.lastIndexOf("/") : 마지막 /의 인덱스 반환
+  url = url.substring(0,url.lastIndexOf("/")) 
+  location.href = url + location.search; 
+})
+

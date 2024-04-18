@@ -200,11 +200,9 @@ public class TodoController {
 			// 현재 요청 주소 :  /todo/changeComplete
 			// 응답 주소      :  /todo/detail
 			return "redirect:detail?todoNo=" + todo.getTodoNo(); // 상대경로
+			
 		}
 		
-		
-	
-	
 	
 	
 	

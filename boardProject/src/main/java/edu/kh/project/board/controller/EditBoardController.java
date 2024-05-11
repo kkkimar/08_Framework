@@ -213,6 +213,7 @@ public class EditBoardController {
 			
 		} else {
 			path = "board/boardUpdate";
+//			model.addAttribute(board); 수정함!
 			model.addAttribute("board", board);
 		}
 		

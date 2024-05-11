@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Transactional(rollbackFor=Exception.class)
 @PropertySource("classpath:/config.properties")
-public class EditBoardServiceImple implements EditBoardService{
+public class EditBoardServiceImpl implements EditBoardService{
 	
 	public final EditBoardMapper mapper;
 	

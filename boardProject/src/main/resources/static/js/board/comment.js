@@ -176,11 +176,15 @@ addContent.addEventListener("click", e =>{
   .then(response => response.text())
   .then(result => {
 
+    //result == 작성된 댓글 번호
+
     if(result > 0){
       alert("댓글이 등록 되었습니다");
       commentContent.value = ""; // 작성한 댓글 내용 지우기
       selectCommentList(); // 댓글 목록을 다시 조회해서 화면에 출력
    
+      /* 알림을 DB 추가 + 게시글 작성자 접속시 알림 전달 */
+      sendNotificationFn("insertComment",`${location.pathname}?cn=${result}`, boardNo);
     } else{
       alert("댓글 등록 실패");
     }
@@ -290,7 +294,10 @@ const insertChildComment = (parentCommentNo,btn) =>{
     if(result > 0){
       alert("답글이 등록 되었습니다");
       selectCommentList(); // 댓글 목록을 다시 조회해서 화면에 출력
-   
+
+      /* 알림을 DB에 추가 + 게시글 작성자 접속 시 알림 전달 */
+      sendNotificationFn("insertComment", `${location.pathname}?cn=${result}`, boardNo);
+      
     } else{
       alert("답글 등록 실패");
     }

@@ -108,6 +108,7 @@ public class MemberServiceImpl implements MemberService {
 	
 	// 빠른 로그인
 	// -> 일반 로그인에서 비밀번호 비교만 제외
+	@Transactional //AOP가 동작하려면 메서드 마다 따로따로 써주어야 함
 	@Override
 	public Member quickLogin(String memberEmail) {
 		
@@ -118,7 +119,6 @@ public class MemberServiceImpl implements MemberService {
 		
 		// 조회된 비밀번호 null로 변경
 		loginMember.setMemberPw(null);
-		
 		
 		return loginMember;
 	}

@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.kar.book.model.dto.BookList;
+import com.kar.book.model.dto.PostsDTO;
 
 @Mapper
 public interface BookListMapper {
@@ -28,6 +29,10 @@ public interface BookListMapper {
 	 * @return
 	 */
 	List<BookList> bookTitleSearch(String bookTitle);
+
+
+	//event 조회 테스트
+	List<PostsDTO> findEvents();
 
 
 	

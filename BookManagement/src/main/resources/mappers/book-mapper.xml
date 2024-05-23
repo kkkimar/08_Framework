@@ -28,5 +28,11 @@
 		ORDER BY BOOK_NO
 	
 	</select>
+	
+	<select id="findEvents" resultType="PostsDTO">
+	
+		SELECT * FROM POSTS
+	
+	</select>
   
 </mapper>

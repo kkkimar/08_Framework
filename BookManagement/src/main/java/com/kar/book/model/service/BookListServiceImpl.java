@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kar.book.model.dto.BookList;
+import com.kar.book.model.dto.PostsDTO;
 import com.kar.book.model.mapper.BookListMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -46,6 +47,11 @@ public class BookListServiceImpl implements BookListService {
 		return mapper.bookTitleSearch(bookTitle);
 	}
 	
+	//이벤트 조회 테스트
+	@Override
+	public List<PostsDTO> findEvents() {
+		return mapper.findEvents();
+	}
 	
 	
 }

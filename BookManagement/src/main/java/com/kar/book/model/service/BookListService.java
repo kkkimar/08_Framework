@@ -3,6 +3,7 @@ package com.kar.book.model.service;
 import java.util.List;
 
 import com.kar.book.model.dto.BookList;
+import com.kar.book.model.dto.PostsDTO;
 
 public interface BookListService {
 
@@ -26,5 +27,8 @@ public interface BookListService {
 	 * @return bookList
 	 */
 	List<BookList> bookTitleSearch(String bookTitle);
+
+	//이벤트 조회
+	List<PostsDTO> findEvents();
 
 }
